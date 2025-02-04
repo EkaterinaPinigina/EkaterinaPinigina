@@ -1,0 +1,14 @@
+def printing(cesty):
+    print('| First         | Last          | Name          | Ext           |')
+    print('|---------------|---------------|---------------|---------------|')
+    for i in cesty:
+        cesta = reformate(i)
+        first = cesta["DIRS"][0] if len(cesta['DIRS']) > 0 else ""
+        last = cesta["DIRS"][-1] if len(cesta['DIRS']) > 0 else ""
+        print(
+            f'| {first.ljust(14)}| {last.ljust(14)}| {cesta["NAME"].ljust(14)}| {cesta["EXT"].upper().ljust(14)}|')
+
+
+printing(['/User/Karel/Desktop/my_file.r',
+          '/User/Karel/Desktop/my_folder/print.jpg',
+          '\\User\\Karel\\Desktop\\books\\edu.cmd', 'hey.r', 'cesta/none.f'])
