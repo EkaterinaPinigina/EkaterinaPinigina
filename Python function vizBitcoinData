@@ -1,0 +1,26 @@
+import random
+
+import requests
+import pandas as pd
+from time import sleep
+import plotly.express as px
+
+
+def getBitcoinData(n, lag, curr: str | list):
+    if type(curr) == str:
+        curr = [curr]
+    data = {c: [] for c in curr}
+    data['time'] = []
+    for i in range(n):
+        try:
+            response = requests.get('https://blockchain.info/ticker')
+            if response.status_code != 200:
+                raise ValueError('API request unsuccessful')
+            res_dict = response.json()
+            for c in curr:
+                data[c].append((res_dict[c]['buy'] + res_dict[c]['sell']) / 2)
+            data['time'].append(pd.Timestamp.now())
+            sleep(lag)
+        except Exception as e:
+            print(f'An error occurred: {e}')
+    return pd.DataFrame(data)
