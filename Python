@@ -1,0 +1,51 @@
+def cetverec(a=None, obsah=None, obvod=None):
+    result = {'a': None, 'obsah': None, 'obvod': None, 'tut_ok': False}
+    try:
+        if a is not None:
+            if float(a) < 0:
+                raise ValueError
+            result['tut_ok'] = True
+            result['a'] = float(a)
+            result['obsah'] = a ** 2
+            result['obvod'] = 4 * a
+        if obsah is not None:
+            if float(obsah) < 0:
+                raise ValueError
+            if result['tut_ok']:
+                if result['obsah'] != obsah:
+                    print('Nekonzistentni situace – takovy ctverec neexistuje.')
+                    return {'a': None, 'obsah': None, 'obvod': None, 'tut_ok': False}
+            else:
+                result['tut_ok'] = True
+                result['a'] = obsah ** 0.5
+                result['obsah'] = float(obsah)
+                result['obvod'] = 4 * result['a']
+
+        if obvod is not None:
+            if float(obvod) < 0:
+                raise ValueError
+            if result['tut_ok']:
+                if result['obvod'] != obvod:
+                    print('Nekonzistentni situace – takovy ctverec neexistuje.')
+                    return {'a': None, 'obsah': None, 'obvod': None, 'tut_ok': False}
+            else:
+                result['tut_ok'] = True
+                result['a'] = obvod / 4
+                result['obsah'] = result['a'] ** 2
+                result['obvod'] = float(obvod)
+    except Exception as e:
+        print(f"Nastala chyba: {type(e).__name__}")
+        return {'a': None, 'obsah': None, 'obvod': None, 'tut_ok': False}
+    return result
+
+
+print('cetverec(obsah=9)')
+print(cetverec(obsah=9))
+print('cetverec(obsah=-10)')
+print(cetverec(obsah=-10))
+print("cetverec(a='xssx')")
+print(cetverec(a='xssx'))
+print("cetverec(obsah=9, a=1)")
+print(cetverec(obsah=9, a=1))
+print("cetverec(obsah=4, a=2, obvod=8)")
+print(cetverec(obsah=4, a=2, obvod=8))
