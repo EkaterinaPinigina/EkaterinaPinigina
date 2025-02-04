@@ -1,0 +1,21 @@
+def encode(message: str, key: dict[str, str]) -> str:
+    result = ""
+    for symbol in message:
+        result += key[symbol] if symbol in key else symbol
+    return result
+
+
+def is_isomorphic(key: dict[str, str]) -> bool:
+    symbols = [key[i] for i in key]
+    return len(symbols) == len(set(symbols))
+
+
+def invert_key(key: dict[str, str]) -> dict[str, str]:
+    if not is_isomorphic(key):
+        raise ValueError("oj vej, všechno špatně")
+
+    return {value: i for i, value in key.items()}
+
+
+def decode(message: str, key: dict[str, str]) -> str:
+    return encode(message, invert_key(key))
