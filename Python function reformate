@@ -1,0 +1,20 @@
+def reformate(cesta):
+    try:
+        cesta = cesta.replace('\\', '/')
+        split_dot = cesta.split('.')
+        if len(split_dot) == 1:
+            raise Exception("neni cesta")
+        ext = split_dot[-1]
+        name = cesta.split('/')[-1].split('.')[0]
+        dirs = cesta.split('/')[:-1]
+        while "" in dirs:
+            dirs.remove("")
+        return {'NAME': name, 'EXT': ext, 'DIRS': tuple(dirs)}
+    except Exception as e:
+        print(f"Nastala chyba: {str(e.__class__.__name__)}")
+        return {'NAME': "", 'EXT': "", 'DIRS': ()}
+
+
+print(reformate('/User/Karel/Desktop/my_file.r'))
+print(reformate("\\User\\Karel\\Desktop\\my_file.r"))
+print(reformate('C:\\Users\\Karel\\Desktop\\my_file.r'))
