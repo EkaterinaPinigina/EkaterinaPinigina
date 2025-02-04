@@ -1,0 +1,39 @@
+import random
+
+import requests
+import pandas as pd
+from time import sleep
+import plotly.express as px
+
+
+def getBitcoinData(n, lag, curr: str | list):
+    if type(curr) == str:
+        curr = [curr]
+    data = {c: [] for c in curr}
+    data['time'] = []
+    for i in range(n):
+        try:
+            response = requests.get('https://blockchain.info/ticker')
+            if response.status_code != 200:
+                raise ValueError('API request unsuccessful')
+            res_dict = response.json()
+            for c in curr:
+                data[c].append((res_dict[c]['buy'] + res_dict[c]['sell']) / 2 + random.randint(0, 1000))
+            data['time'].append(pd.Timestamp.now())
+            sleep(lag)
+        except Exception as e:
+            print(f'An error occurred: {e}')
+    return pd.DataFrame(data)
+
+
+def vizBitcoinData(df):
+    df = df.melt(id_vars='time', var_name='currency', value_name='price')
+    df['time'] = df['time'].astype(str)
+    fig = px.bar(df, x='time', y='price', color='currency', text='price', barmode='group',
+                 title='Bitcoin Prices', animation_frame='time')
+    fig.show()
+
+
+data2 = getBitcoinData(n=50, lag=0.1, curr=["USD", "CZK"])
+
+vizBitcoinData(data2)
