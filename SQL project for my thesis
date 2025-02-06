@@ -1,0 +1,25 @@
+//The SQL query starts by converting the `r.amount` from the original currency to euros using the exchange rate `er.rate` 
+//from the `exchange rates`. The result is rounded to two decimal places and cast to a numeric type with two decimal places. 
+//An `INNER JOIN` is then applied to meet all the required conditions and rules.
+
+SELECT 
+  DISTINCT(r.id), 
+  I.uid AS userId, 
+  I.ucountry_code AS country_code, 
+  r.account_id, 
+  (ROUND(r.amount / er.rate, 2)::NUMERIC(14, 2) * 1.00) AS amount_eur,
+  record_date,
+  note,
+  payee
+
+//Data sources
+
+FROM
+  records AS r
+  LEFTJOINcurrencies AS c
+    ONr.currency_id = c.id
+  INNERJOINexchange_rates AS er
+    ONc.code =LOWER(er."to")
+    ORc.code = er."to"
+    
+   
