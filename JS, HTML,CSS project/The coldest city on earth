@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yakutsk city❄️</title>
+    <style>
+      h1 {
+        text-align: center;
+        color: #2e83bd;
+      }
+      h2 {
+        text-align: center;
+        border: 1px solid #2e83bd;
+        line-height: 50px;
+        font-size: 18px;
+        border-radius: 4px;
+        background-color: #c4ebfc;
+      }
+
+      img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        border-radius: 10px;
+      }
+
+      p {
+        line-height: 1.5;
+        font-size: 13px;
+        margin: 20px 0 10px;
+      }
+      button {
+        display: block;
+        margin: 20px auto;
+        color: white;
+        background: #2e83bd;
+        font-size: 18px;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 6px;
+        box-shadow: 5px 5px 10px rgba (0, 0, 0, 0, 3);
+        transition: all 200ns ease-in-out;
+      }
+      button:hover {
+        opacity: 0, 9;
+        cursor: pointer;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px 60px;
+      }
+      .click-for-more {
+        text-decoration: none;
+        color: #2e83bd;
+        font-size: 13px;
+      }
+      .click-for-more:hover {
+        text-decoration: underline;
+      }
+      .footer {
+        text-align: center;
+      }
+      body {
+        background: linear-gradient(
+          68.6deg,
+          rgb(252, 165, 241) 1.8%,
+          rgb(181, 255, 255) 100.5%
+        );
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>The coldest city on earth</h1>
+      <h2>Yakutsk city</h2>
+      <img
+        src="https://s3.amazonaws.com/shecodesio-production/uploads/files/000/015/757/original/yakutskpinigina.jpeg?1629665342"
+        alt="City Yakutsk"
+        width="350"
+      />
+      <p>
+        Yakutsk, its capital, is one of the coldest big cities on earth – so
+        cold it's entirely built on permafrost. Most of its buildings are on
+        pylons or stilts, made of wood or concrete, so they won't melt the
+        permafrost. It came into being in 1632, when the Yenesei Cossacks built
+        a stockade here on the great Lena River.
+      </p>
+      <a
+        href="https://www.mircorp.com/yakutsk-coldest-cities-next-hot-destination/"
+        target="_blank"
+        class="Click-for-more"
+        >Click for know more: Why is Yakutsk one of the coldest cities on earth?
+      </a>
+      <button class="know-button">Let's know more!🤓</button>
+      <p class="footer">
+        This page was built by
+        <a
+          href="https://www.linkedin.com/in/ekaterina-pinigina-1b46b7144"
+          target="_blank"
+          >Ekaterina Pinigina</a
+        >
+      </p>
+    </div>
+    <script>
+      function know() {
+        let name = prompt("What is your name?");
+        let email = prompt("What is your email address?");
+        let emoji = prompt("What is your favorite emoji?");
+
+        alert("Thank you " + name + "! We'll be in touch by email! " + emoji);
+      }
+      let knowbutton = document.querySelector(".know-button");
+      knowbutton.addEventListener("click", know);
+    </script>
+  </body>
+</html>
