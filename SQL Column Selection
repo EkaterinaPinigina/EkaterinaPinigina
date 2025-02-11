@@ -1,25 +1,48 @@
-//The SQL query starts by converting the `r.amount` from the original currency to euros using the exchange rate `er.rate` 
-//from the `exchange rates`. The result is rounded to two decimal places and cast to a numeric type with two decimal places. 
-//An `INNER JOIN` is then applied to meet all the required conditions and rules.
+//SQL Column Selection
 
-SELECT 
-  DISTINCT(r.id), 
-  I.uid AS userId, 
-  I.ucountry_code AS country_code, 
-  r.account_id, 
-  (ROUND(r.amount / er.rate, 2)::NUMERIC(14, 2) * 1.00) AS amount_eur,
-  record_date,
-  note,
-  payee
+SELECT DISTINCT(r.id), 
+       I.uid AS userId, 
+       I.ucountry_code AS country_code, 
+       r.account_id, 
+       record_date, 
+       note, 
+       payee, 
+       (ROUND(r.amount / er.rate, 2)::NUMERIC(14, 2) * 1.00) AS amount_eur
+//Data Dources 
 
-//Data sources
+FROM records AS r 
+LEFT JOIN currencies AS c ON r.currency_id = c.id 
+INNER JOIN exchange_rates AS er ON c.code = LOWER(er."to") OR c.code = er."to" 
+INNER JOIN (subquery) AS I ON I.uid = r.user_id AND I.rpayee = r.payee
 
-FROM
-  records AS r
-  LEFTJOINcurrencies AS c
-    ONr.currency_id = c.id
-  INNERJOINexchange_rates AS er
-    ONc.code =LOWER(er."to")
-    ORc.code = er."to"
-    
-   
+//Subquery
+
+SELECT u.id AS uid, 
+       u.country_code AS ucountry_code, 
+       r.payee AS rpayee, 
+       SUM(ROUND(r.amount / er.rate, 2)::NUMERIC(14, 2)) AS sum_usd, 
+       COUNT(1) AS cnt 
+FROM records AS r 
+LEFT JOIN users AS u ON u.id = r.user_id 
+INNER JOIN (subquery us) ON u.id = us.id 
+LEFT JOIN currencies AS c ON r.currency_id = c.id 
+INNER JOIN exchange_rates AS er ON c.code = LOWER(er."to") OR c.code = er."to" 
+WHERE (conditions) 
+GROUP BY u.id, r.payee, r.record_type 
+HAVING (conditions)
+
+//Main Conditions
+
+WHERE TO_CHAR(r.record_date, 'YYYY-MM') = '{year_month}' 
+  AND r.payee IS NOT NULL 
+  AND r.integration_source IS NOT NULL 
+  AND u.continent_code IN ('eu', 'EU') 
+  AND u.country_code NOT IN ('ru', 'RU', 'gb', 'GB', 'ir', 'IR') 
+  AND u.app_name = '{app_name}' 
+  AND ROUND(r.amount / er.rate, 2)::NUMERIC(14, 2) >= '-15000'::INTEGER::NUMERIC 
+  AND ROUND(r.amount / er.rate, 2)::NUMERIC(14, 2) <= 15000::NUMERIC
+
+//Final Conditions:
+
+AND ABS(SUM(ROUND(r.amount / er.rate, 2)::NUMERIC(14, 2))) > {sum_threshold} 
+  AND COUNT(1) >= 5
