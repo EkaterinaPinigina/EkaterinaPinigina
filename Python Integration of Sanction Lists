@@ -1,0 +1,48 @@
+import requests
+from bs4 import BeautifulSoup
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+# requests library for making HTTP requests
+# BeautifulSoup library for parsing data from HTML and XML files
+# smtplib library for sending emails
+# MIMEText and MIMEMultipart classes for creating email messages
+
+def check_for_new_documents():
+    url = "https://data.europa.eu/data/datasets/consolidated-list-of-persons-groups-and-entities-subject-to-eu-financial-sanctions?locale=en"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        # Get information about the documents
+        # Compare with existing records or stored new documents in the database
+        # Example: Send email notification for each new document
+        if new_documents_found:
+            send_email_notification()
+
+# check_for_new_documents function downloads the HTML content from the given URL and checks if new documents are available.
+
+def send_email_notification():
+    sender_email = "email"
+    receiver_email = "email"
+    password = "password"
+    subject = "New Documents Available"
+    body = "https://data.europa.eu/data/datasets/consolidated-list-of-persons-groups-and-entities-subject-to-eu-financial-sanctions?locale=en"
+    
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain'))
+    
+    with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        server.starttls()
+        server.login(sender_email, password)
+        text = message.as_string()
+        server.sendmail(sender_email, receiver_email, text)
+
+# send_email_notification function sends an email notification using Gmail. The email includes the subject “New Documents Available” and the body containing the link to the documents.
+
+# Running the check for new documents regularly
+check_for_new_documents()
