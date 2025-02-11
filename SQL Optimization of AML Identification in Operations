@@ -1,1 +1,64 @@
+# Definition of transaction type
+CREATE TYPE transaction_type AS ENUM (
+    'platba', 'převod', 'výběr_z_bankomatu', 'poplatky', ...
+);
 
+# Definition of payment recipient type
+CREATE TYPE payee_category AS ENUM(
+    'obchodník', 'banka', 'jednotlivec', ...
+);
+
+# Definition of account type
+CREATE TYPE account_type AS ENUM(
+    'běžný_účet', 'spořicí_účet', 'firemní_účet', ...
+);
+
+//Category Creation:
+
+//Definition of a set of categories based on identified variables, such as "Payments to Merchants," "Transfers Between Own Accounts," "ATM Withdrawals," etc.
+
+//Assigning Transactions to Categories:
+# Creation of category table
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY, 
+    category_name VARCHAR(255) NOT NULL
+);
+
+# Inserting categories into the table
+INSERT INTO categories (category_name) 
+VALUES 
+    ('Platby obchodníkům'), 
+    ('Převody mezi vlastními účty'), 
+    ('Výběry z bankomatu'), 
+    ...;
+
+//Based on identified variables, each transaction is assigned to the corresponding category.
+# Update the records table with new columns for categories
+ALTER TABLE records 
+    ADD COLUMN transaction_type transaction_type, 
+    ADD COLUMN payee_category payee_category, 
+    ADD COLUMN account_type account_type;
+    
+# Assigning values to new columns based on conditions
+UPDATE records 
+SET 
+    transaction_type = CASE 
+        WHEN ... THEN 'platba' 
+        WHEN ... THEN 'převod' 
+        WHEN ... THEN 'výběr_z_bankomatu' 
+        ELSE ... 
+    END,
+    payee_category = CASE 
+        WHEN ... THEN 'obchodník' 
+        WHEN ... THEN 'banka' 
+        WHEN ... THEN 'jednotlivec' 
+        ELSE ... 
+    END,
+    account_type = CASE 
+        WHEN ... THEN 'běžný_účet' 
+        WHEN ... THEN 'spořicí_účet' 
+        WHEN ... THEN 'firemní_účet' 
+        ELSE ... 
+    END;
+
+//Each transaction contains assigned note and payee data, based on which I processed this list of transaction types.
